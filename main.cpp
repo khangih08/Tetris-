@@ -9,12 +9,12 @@ int main(int argc, char *args[])
     srand(time(0));
     Game* game = new Game;
     game -> init("Tetris", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT);
-//    game -> loadMedia();
+
 
 while (game->running())
     {
     game -> loadMedia();
-     game -> handleEvents();
+ //    game -> handleEvents(SDL_Event event);
      game -> playGame();
 //     game -> updateRenderer();
     }
