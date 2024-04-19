@@ -192,34 +192,52 @@ bool GameState::isBoardFull() {
     }
     return false;
 }
+Point GameState::generateNewPiece() {
+    Point nextPiece[4];
+    int randomPiece = rand() % 7;
 
-void GameState::renderNextPieces(SDL_Renderer* gRenderer, int randomColor, int randomPiece) {
-    // Lấy màu để vẽ các khối
-    int colors[3] = {randomColor, randomColor, randomColor}; // Điều chỉnh cho phù hợp với logic của bạn
-
-    // Vị trí ban đầu để vẽ các khối tiếp theo
-    int startX = 490; // Điều chỉnh vị trí xuất hiện trên màn hình
-    int startY = 31; // Điều chỉnh vị trí xuất hiện trên màn hình
-
-    // Khoảng cách giữa các khối tiếp theo
-    int spacing = PIECE_SIZE * 2; // Điều chỉnh khoảng cách giữa các khối
-
-    // Vẽ các khối tiếp theo lên màn hình
-    for (int i = 0; i < 3; ++i) {
-        // Tạo ra khối tiếp theo
-//        generatePiece(randomPiece); // randomPiece là chỉ số của loại khối tùy thuộc vào logic của bạn
-
-        // Vẽ khối tiếp theo lên màn hình
-        for (int j = 0; j < 4; ++j) {
-            SDL_Rect nextPieceRect;
-            nextPieceRect.x = startX + j * 10.5; // Điều chỉnh vị trí xuất hiện trên màn hình
-            nextPieceRect.y = startY + i * spacing; // Điều chỉnh vị trí xuất hiện trên màn hình
-            nextPieceRect.w = 10.5;
-            nextPieceRect.h = 10.5;
-
-            // Vẽ khối với màu tương ứng
-            SDL_SetRenderDrawColor(gRenderer, colors[i], colors[i], colors[i], 0);
-            SDL_RenderFillRect(gRenderer, &nextPieceRect);
-        }
+    for (int i = 0; i < 4; ++i) {
+        nextPiece[i].x = figures[randomPiece][i] % 2 + 2;
+        nextPiece[i].y = figures[randomPiece][i] / 2;
     }
+
+    return nextPiece[4];
+}
+void GameState::updateNextPieces() {
+    for (int i = 0; i < 4; ++i) {
+    currentTetrads[i] = next1Tetrads[i];
+    next1Tetrads[i] = next2Tetrads[i];
+//    next1Tetrads[i] = next2Tetrads[i];
+}
+}
+
+void GameState::renderNextPieces(SDL_Renderer* gRenderer, int randomColor) {
+    // Mảng chứa màu sắc của các khối
+    int colors[3] = {randomColor, randomColor, randomColor};
+    int pieceColors[7][3] = {
+        {255, 0, 0},    // Đỏ
+        {0, 255, 0},    // Xanh lá
+        {0, 0, 255},    // Xanh dương
+        {255, 255, 0},  // Vàng
+        {255, 0, 255},  // Hồng
+        {0, 255, 255},  // Cyan
+        {255, 165, 0}   // Cam
+    };
+    int startX = 490;
+    int startY = 31;
+    int spacing = PIECE_SIZE * 2;
+
+    for (int i = 0; i < 3; ++i) {
+        SDL_Rect nextPieceRect;
+        nextPieceRect.x = startX;
+        nextPieceRect.y = startY + i * spacing;
+        nextPieceRect.w = PIECE_SIZE;
+        nextPieceRect.h = PIECE_SIZE;
+
+        // Vẽ khối với màu tương ứng
+        SDL_SetRenderDrawColor(gRenderer, pieceColors[i][0], pieceColors[i][1], pieceColors[i][2], 255);
+        SDL_RenderFillRect(gRenderer, &nextPieceRect);
+    }
+
+
 }

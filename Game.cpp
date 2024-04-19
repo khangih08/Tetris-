@@ -303,7 +303,7 @@ void Game::playGame()
                  done = true;
                  isRunning = false;
               }
-           game.renderNextPieces(gRenderer, randomColor,randomPiece);
+           game.renderNextPieces(gRenderer, randomColor);
            game.showIdlePiece(gRenderer);
            game.showActivePiece(gRenderer,randomColor);
            SDL_RenderPresent(gRenderer);
@@ -311,7 +311,10 @@ void Game::playGame()
 }
 void Game::init()
 {
-    rotate_ = false,fast = false,isPressed = false,beginGame = true;
+    rotate_ = false;
+    fast = false;
+    isPressed = false;
+    beginGame = true;
     moveTime = 0;
     pause = false;
     done = false;
