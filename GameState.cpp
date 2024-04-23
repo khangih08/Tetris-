@@ -188,17 +188,27 @@ int GameState::findLastEmptyRowInColumn(int col) const {
 void GameState::draw_falling_piece(SDL_Renderer *gRenderer) {
     int cellWidth = PIECE_SIZE;
     int cellHeight = PIECE_SIZE;
-
+    // board[i][j]
     int minY = piece[0].y;
     for (int i = 1; i < 4; ++i) {
         if (piece[i].y < minY) {
             minY = piece[i].y;
         }
     }
+//    int stop = 100;
+//    for(int i = 0; i < 4; i++){
+//        int tmp = piece[i].y/cellHeight;
+//        while(tmp < 23 && board[tmp+1][piece[i].x] == 0){
+//            tmp++;
+//        }
+//        stop = std::min(stop, tmp-piece[i].y);
+//    }
     for (int i = 0; i < 4; ++i) {
         int x = piece[i].x * cellWidth;
-        int y = (piece[i].y - minY) * cellHeight;
+        int y = (piece[i].y - minY ) * cellHeight;
+//        std::cout << piece[i].x << " " << piece[i].y << '\n';
         int lastEmptyRow = findLastEmptyRowInColumn(piece[i].x);
+//        std::cout << lastEmptyRow << '\n';
         int posY = (BOARD_HEIGHT - lastEmptyRow - 1) + y + 540;
         int posX = (SCREEN_WIDTH - BOARD_WIDTH * cellWidth) / 2 + x;
         SDL_Rect cellRect = {posX, posY, cellWidth, cellHeight};
