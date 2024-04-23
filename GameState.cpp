@@ -12,7 +12,7 @@ void GameState::moveLeftRight(int dx)
    }
 
 }
- void GameState::generatePiece(int randomPiece)
+void GameState::generatePiece(int randomPiece)
 {
     for (int i = 0; i < 4 ; i++)
     {
@@ -46,10 +46,7 @@ bool GameState::isCollision() const{
 
     for(int i = 0; i < 4; i++){
 
-        if(piece[i].x < 0 || piece[i].x >= BOARD_WIDTH || piece[i].y >= BOARD_HEIGHT -
-
-
-            1)
+        if(piece[i].x < 0 || piece[i].x >= BOARD_WIDTH || piece[i].y >= BOARD_HEIGHT -1)
             return true;
         else{
 
@@ -68,20 +65,15 @@ void GameState::initBoard()
 void GameState::deleteStatusPiece(int randomColor)
 {
     if (!isCollision()) {
-        // Xóa các vị trí của các khối hiện tại trên bảng
         for (int i = 0; i < 4; i++) {
             board[piece[i].y][piece[i].x] = 0;
         }
-
-        // Cập nhật vị trí mới của các khối trong mảng tmpPiece
         for (int i = 0; i < 4; i++) {
             tmpPiece[i] = piece[i];
             piece[i].y++;
         }
-
-        // Đặt các vị trí mới của các khối trên bảng
         for (int i = 0; i < 4; i++) {
-            board[piece[i].y][piece[i].x] = randomColor; // Bạn cần thay đổi randomColor bằng màu thích hợp
+            board[piece[i].y][piece[i].x] = randomColor;
         }
     }
 }
@@ -143,43 +135,36 @@ void GameState::showActivePiece(SDL_Renderer* gRenderer,int randomColor){
             int pieceX = 490 + piece[i].x * PIECE_SIZE;
             int pieceY = 31 + (piece[i].y - 3) * PIECE_SIZE;
             createRect(activePiece, pieceX, pieceY, PIECE_SIZE, PIECE_SIZE);
-  //              createRect(activePiece,25 + piece[i].x*25,(piece[i].y-3)*25,PIECE_SIZE,PIECE_SIZE);
                 colorSelect(gRenderer,randomColor);
                 SDL_RenderFillRect(gRenderer,&activePiece);
             }
 }
 }
 void GameState::checkAndClearFilledRows(int& score, int& target, int& level) {
-    // Duyệt qua từng hàng từ dưới lên trên
     for (int y = BOARD_HEIGHT - 1; y >= 0; --y) {
         bool rowFilled = true;
-        // Kiểm tra xem hàng có đầy đủ các mảnh block không
         for (int x = 0; x < BOARD_WIDTH; ++x) {
             if (board[y][x] == 0) {
                 rowFilled = false;
                 break;
             }
         }
-        // Nếu hàng đã đầy đủ các mảnh block
         if (rowFilled) {
-            // Di chuyển các hàng phía trên xuống một hàng
             for (int yy = y; yy > 0; --yy) {
                 for (int x = 0; x < BOARD_WIDTH; ++x) {
                     board[yy][x] = board[yy - 1][x];
                 }
             }
-            // Đặt hàng trống ở hàng đầu tiên
+
             for (int x = 0; x < BOARD_WIDTH; ++x) {
                 board[0][x] = 0;
             }
-            // Cập nhật điểm số của người chơi
             target++;
-            score += 100; // Ví dụ: cộng 100 điểm mỗi khi xóa một hàng
+            score += 100;
             if (score >= 1000) {
                 level++;
-                score = 0; // Đặt lại điểm về 0
+                score = 0;
             }
-            // Kiểm tra các hàng tiếp theo, bởi vì có thể có nhiều hàng đã được xóa
             ++y;
         }
     }
@@ -191,6 +176,35 @@ bool GameState::isBoardFull() {
         }
     }
     return false;
+}
+int GameState::findLastEmptyRowInColumn(int col) const {
+    for (int row = BOARD_HEIGHT - 1; row >= 0; --row) {
+        if (board[row][col] == 0 || (board[row][col] != 0 && row == BOARD_HEIGHT - 1)) {
+            return row;
+        }
+    }
+    return -1;
+}
+void GameState::draw_falling_piece(SDL_Renderer *gRenderer) {
+    int cellWidth = PIECE_SIZE;
+    int cellHeight = PIECE_SIZE;
+
+    int minY = piece[0].y;
+    for (int i = 1; i < 4; ++i) {
+        if (piece[i].y < minY) {
+            minY = piece[i].y;
+        }
+    }
+    for (int i = 0; i < 4; ++i) {
+        int x = piece[i].x * cellWidth;
+        int y = (piece[i].y - minY) * cellHeight;
+        int lastEmptyRow = findLastEmptyRowInColumn(piece[i].x);
+        int posY = (BOARD_HEIGHT - lastEmptyRow - 1) + y + 540;
+        int posX = (SCREEN_WIDTH - BOARD_WIDTH * cellWidth) / 2 + x;
+        SDL_Rect cellRect = {posX, posY, cellWidth, cellHeight};
+        SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
+        SDL_RenderFillRect(gRenderer, &cellRect);
+    }
 }
 Point GameState::generateNewPiece() {
     Point nextPiece[4];
@@ -207,36 +221,26 @@ void GameState::updateNextPieces() {
     for (int i = 0; i < 4; ++i) {
     currentTetrads[i] = next1Tetrads[i];
     next1Tetrads[i] = next2Tetrads[i];
-//    next1Tetrads[i] = next2Tetrads[i];
 }
 }
 
 void GameState::renderNextPieces(SDL_Renderer* gRenderer, int randomColor) {
-    // Mảng chứa màu sắc của các khối
-    int colors[3] = {randomColor, randomColor, randomColor};
-    int pieceColors[7][3] = {
-        {255, 0, 0},    // Đỏ
-        {0, 255, 0},    // Xanh lá
-        {0, 0, 255},    // Xanh dương
-        {255, 255, 0},  // Vàng
-        {255, 0, 255},  // Hồng
-        {0, 255, 255},  // Cyan
-        {255, 165, 0}   // Cam
-    };
-    int startX = 490;
-    int startY = 31;
-    int spacing = PIECE_SIZE * 2;
+    int startX = 800;
+    int startY = 380;
+    int spacing = 65;
 
-    for (int i = 0; i < 3; ++i) {
-        SDL_Rect nextPieceRect;
-        nextPieceRect.x = startX;
-        nextPieceRect.y = startY + i * spacing;
-        nextPieceRect.w = PIECE_SIZE;
-        nextPieceRect.h = PIECE_SIZE;
+    for (int i = 0; i < 3; ++i)
+      {
+        for (int j = 0; j < 4; j++)
+         {
+           SDL_Rect nextPieceRect;
+           int pieceX = startX + piece[j].x *PIECE_SIZE;
+           int pieceY = startY + piece[j].y *PIECE_SIZE + i*spacing;
 
-        // Vẽ khối với màu tương ứng
-        SDL_SetRenderDrawColor(gRenderer, pieceColors[i][0], pieceColors[i][1], pieceColors[i][2], 255);
-        SDL_RenderFillRect(gRenderer, &nextPieceRect);
+//           createRect(nextPieceRect, pieceX, pieceY, PIECE_SIZE, PIECE_SIZE);
+           colorSelect(gRenderer,randomColor);
+           SDL_RenderFillRect(gRenderer, &nextPieceRect);
+         }
     }
 
 

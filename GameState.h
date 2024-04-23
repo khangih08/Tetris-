@@ -13,8 +13,10 @@ struct Point
 class GameState
 {
     Point tmpPiece[4],piece[4];
-    ////////Tham khao: https://www.youtube.com/watch?v=zH_omFPqMO4
-    Point nextPieces[3][4];
+    Point nextPieces[4];
+    Point currentTetrads[4];
+    Point next1Tetrads[4];
+    Point next2Tetrads[4];
     const int figures[7][4] =
     {
         {1,3,5,7},
@@ -52,9 +54,10 @@ public:
     bool isBoardFull();
     void draw_falling_piece(SDL_Renderer *gRenderer);
     int findLastEmptyRowInColumn(int col) const;
-    void renderNextPieces(SDL_Renderer* gRenderer,int randomColor, int randomPiece);
+    Point generateNewPiece();
+    void updateNextPieces();
+    void renderNextPieces(SDL_Renderer* gRenderer,int randomColor);
 };
-
 #endif // _GAMEMOVEMENT_H_
 
 

@@ -110,7 +110,23 @@ void Game::handleEvents(SDL_Event event)
             done = true;
             isRunning = false;
             break;
+        case SDL_MOUSEBUTTONDOWN:
+            int mouseX;
+            int mouseY;
+            SDL_GetMouseState(&mouseX, &mouseY);
+//           std::cout << mouseX << " " << mouseY << std::endl;
+        if (mouseX > 900 && mouseX < 930 && mouseY > 420 && mouseY < 450)
+        {
+            done = true;
+            isRunning = false;
         }
+        if (mouseX > 900 && mouseX < 950 && mouseY > 360 && mouseY < 390)
+        {
+           replay = true;
+
+        }
+        }
+
     }
 }
 void Game::loadMedia()
@@ -132,61 +148,6 @@ void Game::loadMedia()
         printf( "Failed to load font! SDL_ttf Error: %s\n", TTF_GetError());
     }
 }
-//void showMessGameOver(){
-//    bool done = false;
-//    bool pause = false;
-//    Uint32 moveTime = 0;
-//    Game game;
-//    GameState game1;
-//    const SDL_MessageBoxButtonData buttons[] = {
-//        { SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 0, "Exit" },
-//        { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Continue" },
-//    };
-//    const SDL_MessageBoxColorScheme colorScheme = {
-//        { /* .colors (.r, .g, .b) */
-            /* [SDL_MESSAGEBOX_COLOR_BACKGROUND] */
-//            { 255,   0,   0 },
-            /* [SDL_MESSAGEBOX_COLOR_TEXT] */
-//            {   255, 255,   0 },
-            /* [SDL_MESSAGEBOX_COLOR_BUTTON_BORDER] */
-//            { 255, 255,   0 },
-            /* [SDL_MESSAGEBOX_COLOR_BUTTON_BACKGROUND] */
-//            {   0,   0, 255 },
-            /* [SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED] */
-//            { 255,   0, 255 }
-//        }
-//    };
-//    const SDL_MessageBoxData messageboxdata = {
-//        SDL_MESSAGEBOX_ERROR, /* .flags */
-//        NULL, /* .window */
-//        "Tetris", /* .title */
-//        "     Game Over!!!    ", /* .message */
-//        SDL_arraysize(buttons), /* .numbuttons */
-//        buttons, /* .buttons */
-//        &colorScheme /* .colorScheme */
-//    };
-//    int buttonid;
-//    if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
-//        SDL_Log("error displaying message box");
-//        return;
-//    }
-//    switch(buttonid)
-//    {
-//        case -1: SDL_Log("No button selected");
-//        break;
-//        case 0: done = true;
-//        break;
-//        case 1: {
-//            game.init("Tetris", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT);
-//            pause = false;
-//            game1.initPiece();
-//            game1.initBoard();
-//            moveTime = SDL_GetTicks();
-//        }
-//        break;
-
-//    }
-//}
 void Game::playGame()
 {
     GameState game;
@@ -196,7 +157,17 @@ void Game::playGame()
     game.initPiece();
     LTexture ltext;
     while (!done) {
+        if (replay)
+        {
+            speed = 0,randomPiece = -1,gameSpeed = 1000;
+            game.initBoard();
+            replay = false;
+            init();
+            game.initPiece();
+        }
         SDL_RenderClear(gRenderer);
+        if (true)
+     {
         SDL_RenderCopy(gRenderer, backGround, NULL, NULL);
           int gridWidth = 10;
           int gridHeight = 20;
@@ -221,10 +192,9 @@ void Game::playGame()
             }
             handleEvents(event);
             if (pause) moveTime = SDL_GetTicks();
-
             else
             {
-                    game.moveLeftRight(dx);
+                  game.moveLeftRight(dx);
                   if(game.isCollision())
                         game.restorePieces();
                     if(rotate_ && randomPiece != 6)
@@ -244,16 +214,13 @@ void Game::playGame()
 
                     if(check){
                                game.getColorLanded(randomColor);
- //                              game.initMark();
-                             //game.deletePiece(randomColor);
-                               //game.deleteAlonePiece();
-                            }
+                             }
                             game.checkAndClearFilledRows(point, target, level);
                             randomPiece = rand()% 7;
                             randomColor = rand()% 6 + 1;
                             game.generatePiece(randomPiece);
                         }
-                        if(fast){
+                        if(fast && !game.checkGameOver() && !replay){
                             switch(gameSpeed)
                             {
                                 case 2000: moveTime += (gameSpeed - 1000);
@@ -298,14 +265,32 @@ void Game::playGame()
 //                    printf("Failed to load background music! SDL_mixer Error: %s\n", Mix_GetError());
 //               }
 //                Mix_PlayMusic(playingMusic, 0);
-            if (game.checkGameOver())
-              {
-                 done = true;
-                 isRunning = false;
-              }
-           game.renderNextPieces(gRenderer, randomColor);
+
+           game.draw_falling_piece(gRenderer);
+ //          game.renderNextPieces(gRenderer, randomColor);
            game.showIdlePiece(gRenderer);
-           game.showActivePiece(gRenderer,randomColor);
+           game.showActivePiece(gRenderer,randomColor);}
+           if (game.checkGameOver())
+              {
+ //                 pause = true;
+            std:: string score = "YOUR SCORE " + std::to_string(point);
+            SDL_Color textColor1 = {255, 0, 0};
+            if (!Score.loadFromRenderedText(gRenderer, gFont, score, textColor1)) {
+             printf("Failed to render text texture!\n");
+                }
+                Score.render(gRenderer, 900, 300);
+                 std::string replay = "Replay ";
+                 if (!replayTexture.loadFromRenderedText(gRenderer, gFont, replay, {255,0,0})) {
+                    printf("Failed to render text texture!\n");
+                   }
+                 replayTexture.render(gRenderer, 900, 360);
+            std::string exit = "Exit";
+                 if (!exitTexture.loadFromRenderedText(gRenderer, gFont, exit, {255,0,0}))
+                   {
+                    printf("Failed to render text texture!\n");
+                   }
+                 exitTexture.render(gRenderer, 900, 420);
+              }
            SDL_RenderPresent(gRenderer);
         }
 }

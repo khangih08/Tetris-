@@ -10,6 +10,7 @@
 class Game
 {
 private:
+      bool replay = false;
       bool isRunning;
       int dx = 0;
       bool rotate_,fast;
@@ -28,9 +29,9 @@ private:
       LTexture Score;
       LTexture Line;
       LTexture LevelTexture;
-//      LTexture InstructionTexture;
-//      LTexture QuitTexture;
-//      LTexture textTexture;
+      LTexture scoreTexture;
+      LTexture replayTexture;
+      LTexture exitTexture;
       SDL_Window *gWindow = NULL;
       SDL_Renderer *gRenderer = NULL;
       TTF_Font* gFont = NULL;
