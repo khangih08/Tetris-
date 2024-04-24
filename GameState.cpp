@@ -177,11 +177,20 @@ bool GameState::isBoardFull() {
     }
     return false;
 }
-int GameState::findLastEmptyRowInColumn(int col) const {
-    for (int row = BOARD_HEIGHT - 1; row >= 0; --row) {
-        if (board[row][col] == 0 || (board[row][col] != 0 && row == BOARD_HEIGHT - 1)) {
+int GameState::findLastEmptyRowInColumn(int col, int row) const {
+//    std::cout << BOARD_HEIGHT << '\n';
+//    std::cout << "\033[2J\033[1;1H";
+//    for(int i = 0; i < BOARD_HEIGHT; i++){
+//        for(int j = 0; j < BOARD_WIDTH; j++)
+//            std::cout << board[i][j];
+//        std::cout << '\n';
+//    }
+    for (int i = row; row < BOARD_HEIGHT; row++) {
+//        if (board[row][col] == 0 || (board[row][col] != 0 && row == BOARD_HEIGHT - 1)) {
+//            return row;
+//        }
+        if(board[row][col] != 0)
             return row;
-        }
     }
     return -1;
 }
@@ -207,14 +216,19 @@ void GameState::draw_falling_piece(SDL_Renderer *gRenderer) {
         int x = piece[i].x * cellWidth;
         int y = (piece[i].y - minY ) * cellHeight;
 //        std::cout << piece[i].x << " " << piece[i].y << '\n';
-        int lastEmptyRow = findLastEmptyRowInColumn(piece[i].x);
-//        std::cout << lastEmptyRow << '\n';
+        int lastEmptyRow = findLastEmptyRowInColumn(piece[i].x, piece[i].y);
+        std::cout << lastEmptyRow << '\n';
         int posY = (BOARD_HEIGHT - lastEmptyRow - 1) + y + 540;
         int posX = (SCREEN_WIDTH - BOARD_WIDTH * cellWidth) / 2 + x;
         SDL_Rect cellRect = {posX, posY, cellWidth, cellHeight};
         SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
         SDL_RenderFillRect(gRenderer, &cellRect);
     }
+//    for(int i = 0; i < BOARD_HEIGHT; i++){
+//        for(int j = 0; j < BOARD_WIDTH; j++)
+//            std::cout << board[i][j];
+//        std::cout << '\n';
+//    }
 }
 Point GameState::generateNewPiece() {
     Point nextPiece[4];
