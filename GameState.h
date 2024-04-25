@@ -9,7 +9,7 @@ struct Point
     int x;
     int y;
 };
-
+// Tham khảo https://www.youtube.com/watch?v=zH_omFPqMO4&t=79s
 class GameState
 {
     Point tempPiece[4],piece[4];
