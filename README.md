@@ -19,7 +19,7 @@ Tetris hay Xếp Hình (1984), trò chơi có 7 loại Khối Hình (Tetromino) 
 - Di chuyển và xoay các block 90 độ, 180 độ, 270 độ
 - Xóa hàng khi các block lấp đầy hàng ngang
 - Tính score, line, level
-- Game Over khi block không thể rơi xuông nữa
+- Game Over khi block không thể rơi xuống nữa
 # 4. Các kĩ thuật lập trình được sử dụng:
 - Kỹ thuật duyệt mảng, sinh khối và màu ngẫu nhiên
 - Class, struct
