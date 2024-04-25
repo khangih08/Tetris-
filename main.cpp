@@ -14,9 +14,7 @@ int main(int argc, char *args[])
 while (game->running())
     {
     game -> loadMedia();
- //    game -> handleEvents(SDL_Event event);
-     game -> playGame();
-//     game -> updateRenderer();
+    game -> playGame();
     }
 
      game -> clean();

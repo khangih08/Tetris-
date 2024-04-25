@@ -15,11 +15,10 @@ const int SCREEN_HEIGHT = 720;
 const std::string gBackGroundPicture = "img/background.png";
 const std::string grid_frame = "img/background.png";
 const std::string playingM = "music/playing.wav";
-//const std::string blocks = "img/blocks.png";
 const int BlockW = 36;
 const int BlockH = 36;
-const int BOARD_WIDTH = 24;
-const int BOARD_HEIGHT = 10;
+const int BOARD_WIDTH = 10;
+const int BOARD_HEIGHT = 24;
 void LogError(std::string msg, int error_code = SDL_ERROR);
 #endif // Data_h
 

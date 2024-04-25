@@ -119,8 +119,7 @@ void Game::handleEvents(SDL_Event event)
             int mouseX;
             int mouseY;
             SDL_GetMouseState(&mouseX, &mouseY);
-//           std::cout << mouseX << " " << mouseY << std::endl;
-        if (mouseX > 900 && mouseX < 930 && mouseY > 420 && mouseY < 450)
+        if (mouseX > 900 && mouseX < 950 && mouseY > 420 && mouseY < 450)
         {
             done = true;
             isRunning = false;
@@ -131,7 +130,6 @@ void Game::handleEvents(SDL_Event event)
 
         }
         }
-
     }
 }
 void Game::loadMedia()
@@ -166,7 +164,6 @@ void Game::loadMedia()
 void Game::playGame()
 {
     GameState game;
-    int speed = 0,randomPiece = -1,gameSpeed = 1000;
     game.initBoard();
     init();
     game.initPiece();
@@ -191,8 +188,8 @@ void Game::playGame()
          while (SDL_PollEvent(&event))
          {
              switch(event.type)
-             {
-             case SDL_MOUSEBUTTONDOWN:
+               {
+                 case SDL_MOUSEBUTTONDOWN:
                 {
                     int mouseX;
                     int mouseY;
@@ -203,7 +200,7 @@ void Game::playGame()
             done = false;
             moveTime = SDL_GetTicks();
         }
-        if (mouseX > 620 && mouseX < 660 && mouseY > 620 && mouseY < 660)
+        if (mouseX > 620 && mouseX < 710 && mouseY > 620 && mouseY < 660)
         {
             done = true;
             isRunning = false;
@@ -240,15 +237,15 @@ void Game::playGame()
 
 
           SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
-         for (int x = 0; x < gridWidth; ++x)
+          for (int x = 0; x < gridWidth; ++x)
             {
-            for (int y = 0; y < gridHeight - 1; ++y)
-              {
+              for (int y = 0; y < gridHeight - 1; ++y)
+               {
                 int posX = (SCREEN_WIDTH - gridWidth * cellWidth) / 2 + x * cellWidth;
                 int posY = (SCREEN_HEIGHT - gridHeight * cellHeight) / 2 + y * cellHeight;
                 SDL_Rect cellRect = {posX, posY, cellWidth, cellHeight};
                 SDL_RenderDrawRect(gRenderer, &cellRect);
-              }
+               }
             }
             handleEvents(event);
             if (pause) moveTime = SDL_GetTicks();
@@ -271,11 +268,11 @@ void Game::playGame()
                         bool check = game.isCollision();
                     if(check || beginGame)
                         {
-
-                    if(check){
+                          if(check)
+                             {
                                game.getColorLanded(randomColor);
                              }
-                            game.checkAndClearFilledRows(point, target, level);
+                            game.ClearFilledRows(point, target, level);
                             randomPiece = rand()% 7;
                             randomColor = rand()% 6 + 1;
                             game.generatePiece(randomPiece);
@@ -287,8 +284,6 @@ void Game::playGame()
                                 break;
                                 case 1000: moveTime +=(gameSpeed - 900);
                                 break;
- //                               case 100: moveTime +=(gameSpeed - 10);
- //                               break;
                             }
 
                             fast = false;
@@ -330,19 +325,19 @@ void Game::playGame()
 
            game.draw_falling_piece(gRenderer);
  //          game.renderNextPieces(gRenderer, randomColor);
-           game.showIdlePiece(gRenderer);
-           game.showActivePiece(gRenderer,randomColor);}
+           game.showPiece1(gRenderer);
+           game.showPiece2(gRenderer,randomColor);}
            if (game.checkGameOver())
               {
-            pause = true;
-            std:: string score = "YOUR SCORE " + std::to_string(point);
-            SDL_Color textColor1 = {255, 0, 0};
-            if (!Score.loadFromRenderedText(gRenderer, gFont, score, textColor1))
-                {
+                 pause = true;
+                 std:: string score = "YOUR SCORE " + std::to_string(point);
+                 SDL_Color textColor1 = {255, 0, 0};
+                 if (!Score.loadFromRenderedText(gRenderer, gFont, score, textColor1))
+                  {
                    printf("Failed to render text texture!\n");
-                }
-                Score.render(gRenderer, 900, 300);
-                 std::string replay = "Replay ";
+                  }
+                  Score.render(gRenderer, 900, 300);
+                std::string replay = "Replay ";
                  if (!replayTexture.loadFromRenderedText(gRenderer, gFont, replay, {255,0,0}))
                    {
                     printf("Failed to render text texture!\n");
@@ -360,6 +355,9 @@ void Game::playGame()
 }
 void Game::init()
 {
+    int speed = 0;
+    randomPiece = -1;
+    gameSpeed = 1000;
     rotate_ = false;
     fast = false;
     isPressed = false;

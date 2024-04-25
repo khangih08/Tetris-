@@ -1,8 +1,8 @@
 #ifndef _GAMESTATE_H_
 #define _GAMESTATE_H_
-#include<SDL.h>
-#include<map>
+#include <SDL.h>
 #include<vector>
+#include "Data.h"
 
 struct Point
 {
@@ -12,7 +12,7 @@ struct Point
 
 class GameState
 {
-    Point tmpPiece[4],piece[4];
+    Point tempPiece[4],piece[4];
     Point nextPieces[4];
     Point currentTetrads[4];
     Point next1Tetrads[4];
@@ -27,13 +27,10 @@ class GameState
         {3,5,7,6},
         {2,3,4,5},
     };
-    int board[24][10],countPiece,tmpBoard[24][10];
+    int board[24][10],countPiece,tempBoard[24][10];
     const int PIECE_SIZE = 30.5;
     bool mark[25][10];
-    bool canMove;
-    std::map<std::pair<int,int>,int> mp;
-    const int BOARD_WIDTH = 10;
-    const int BOARD_HEIGHT = 24;
+
 
 public:
 
@@ -48,16 +45,16 @@ public:
     bool checkGameOver() const;
     void initPiece();
     void deleteStatusPiece(int randomColor);
-    void showIdlePiece(SDL_Renderer* gRenderer);
-    void showActivePiece(SDL_Renderer* gRenderer,int randomColor);
-    void checkAndClearFilledRows(int& score, int& target,int& level);
+    void showPiece1(SDL_Renderer* gRenderer);
+    void showPiece2(SDL_Renderer* gRenderer,int randomColor);
+    void ClearFilledRows(int& score, int& target,int& level);
     bool isBoardFull();
     void draw_falling_piece(SDL_Renderer *gRenderer);
-    int findLastEmptyRowInColumn(int col) const;
+    int findLastRow(int col, int row) const;
     Point generateNewPiece();
     void updateNextPieces();
     void renderNextPieces(SDL_Renderer* gRenderer,int randomColor);
 };
-#endif // _GAMEMOVEMENT_H_
+#endif // _GAMESTATE_H_
 
 

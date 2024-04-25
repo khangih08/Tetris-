@@ -7,7 +7,7 @@ void GameState::moveLeftRight(int dx)
 {
     for(int i = 0; i < 4;i++)
     {
-        tmpPiece[i] = piece[i];
+        tempPiece[i] = piece[i];
         piece[i].x += dx;
    }
 
@@ -16,7 +16,7 @@ void GameState::generatePiece(int randomPiece)
 {
     for (int i = 0; i < 4 ; i++)
     {
-        piece[i].x = figures[randomPiece][i] % 2 + 4;
+        piece[i].x = figures[randomPiece][i] % 2 + 5;
         piece[i].y = figures[randomPiece][i] / 2 ;
 
     }
@@ -26,7 +26,7 @@ void GameState::generatePiece(int randomPiece)
  {
      for(int i = 0; i < 4; i++)
         {
-            tmpPiece[i] = piece[i];
+            tempPiece[i] = piece[i];
             piece[i].y++;
         }
 }
@@ -46,7 +46,7 @@ bool GameState::isCollision() const{
 
     for(int i = 0; i < 4; i++){
 
-        if(piece[i].x < 0 || piece[i].x >= BOARD_WIDTH || piece[i].y >= BOARD_HEIGHT -1)
+        if (piece[i].x < 0 || piece[i].x >= BOARD_WIDTH || piece[i].y >= BOARD_HEIGHT -1)
             return true;
         else{
 
@@ -59,8 +59,12 @@ bool GameState::isCollision() const{
 void GameState::initBoard()
 {
     for(int i = 0; i < BOARD_HEIGHT; i++)
+    {
         for(int j = 0; j < BOARD_WIDTH; j++)
+        {
             board[i][j] = 0;
+        }
+    }
 }
 void GameState::deleteStatusPiece(int randomColor)
 {
@@ -69,7 +73,7 @@ void GameState::deleteStatusPiece(int randomColor)
             board[piece[i].y][piece[i].x] = 0;
         }
         for (int i = 0; i < 4; i++) {
-            tmpPiece[i] = piece[i];
+            tempPiece[i] = piece[i];
             piece[i].y++;
         }
         for (int i = 0; i < 4; i++) {
@@ -80,14 +84,14 @@ void GameState::deleteStatusPiece(int randomColor)
 void GameState::restorePieces()
 {
     for(int i = 0; i < 4; i++){
-        piece[i] = tmpPiece[i];
+        piece[i] = tempPiece[i];
         }
 }
 
 void GameState::getColorLanded(int randomColor)
 {
     for(int i = 0; i < 4; i++){
-        board[tmpPiece[i].y + 1][tmpPiece[i].x] = randomColor;
+        board[tempPiece[i].y + 1][tempPiece[i].x] = randomColor;
         }
 }
 
@@ -102,19 +106,17 @@ void GameState::initPiece(){
     for(int i = 0; i < 4 ; i++)
     {
         piece[i].x = piece[i].y = 0;
-        tmpPiece[i].x = tmpPiece[i].y = 0;
+        tempPiece[i].x = tempPiece[i].y = 0;
     }
 }
 
-void GameState::showIdlePiece(SDL_Renderer* gRenderer)
+void GameState::showPiece1(SDL_Renderer* gRenderer)
 {
     for(int i = 4;i <= 23;i++)
         for(int j = 0; j < 10;j++)
             {
                 SDL_Rect idlePiece;
                 if(board[i][j] == 0) continue;
-                int centerX = SCREEN_WIDTH / 2 - (PIECE_SIZE * 10) / 2;
-                int centerY = SCREEN_HEIGHT / 2 - (PIECE_SIZE * 20) / 2;
                 int pieceX = 490 + j * PIECE_SIZE;
                 int pieceY = 31 + (i - 4) * PIECE_SIZE;
                 createRect(idlePiece, pieceX, pieceY, PIECE_SIZE, PIECE_SIZE);
@@ -123,15 +125,13 @@ void GameState::showIdlePiece(SDL_Renderer* gRenderer)
             }
 }
 
-void GameState::showActivePiece(SDL_Renderer* gRenderer,int randomColor){
+void GameState::showPiece2(SDL_Renderer* gRenderer,int randomColor){
     for(int i = 0; i < 4; i++)
     {
         if(piece[i].y > 3)
             {
             board[piece[i].y-1][piece[i].x] = 0;
             SDL_Rect activePiece;
-            int centerX = SCREEN_WIDTH / 2 - (PIECE_SIZE * 10) / 2;
-            int centerY = SCREEN_HEIGHT / 2 - (PIECE_SIZE * 20) / 2;
             int pieceX = 490 + piece[i].x * PIECE_SIZE;
             int pieceY = 31 + (piece[i].y - 3) * PIECE_SIZE;
             createRect(activePiece, pieceX, pieceY, PIECE_SIZE, PIECE_SIZE);
@@ -140,16 +140,16 @@ void GameState::showActivePiece(SDL_Renderer* gRenderer,int randomColor){
             }
 }
 }
-void GameState::checkAndClearFilledRows(int& score, int& target, int& level) {
+void GameState::ClearFilledRows(int& score, int& target, int& level) {
     for (int y = BOARD_HEIGHT - 1; y >= 0; --y) {
-        bool rowFilled = true;
+        bool check = true;
         for (int x = 0; x < BOARD_WIDTH; ++x) {
             if (board[y][x] == 0) {
-                rowFilled = false;
+                check = false;
                 break;
             }
         }
-        if (rowFilled) {
+        if (check) {
             for (int yy = y; yy > 0; --yy) {
                 for (int x = 0; x < BOARD_WIDTH; ++x) {
                     board[yy][x] = board[yy - 1][x];
@@ -177,20 +177,11 @@ bool GameState::isBoardFull() {
     }
     return false;
 }
-int GameState::findLastEmptyRowInColumn(int col, int row) const {
-//    std::cout << BOARD_HEIGHT << '\n';
-//    std::cout << "\033[2J\033[1;1H";
-//    for(int i = 0; i < BOARD_HEIGHT; i++){
-//        for(int j = 0; j < BOARD_WIDTH; j++)
-//            std::cout << board[i][j];
-//        std::cout << '\n';
-//    }
-    for (int i = row; row < BOARD_HEIGHT; row++) {
-//        if (board[row][col] == 0 || (board[row][col] != 0 && row == BOARD_HEIGHT - 1)) {
-//            return row;
-//        }
-        if(board[row][col] != 0)
+int GameState::findLastRow(int col, int row) const {
+    for (int row = BOARD_HEIGHT - 1; row >= 0; --row) {
+        if (board[row][col] == 0 || (board[row][col] != 0 && row == BOARD_HEIGHT - 1)) {
             return row;
+        }
     }
     return -1;
 }
@@ -203,49 +194,18 @@ void GameState::draw_falling_piece(SDL_Renderer *gRenderer) {
         if (piece[i].y < minY) {
             minY = piece[i].y;
         }
+
     }
-//    int stop = 100;
-//    for(int i = 0; i < 4; i++){
-//        int tmp = piece[i].y/cellHeight;
-//        while(tmp < 23 && board[tmp+1][piece[i].x] == 0){
-//            tmp++;
-//        }
-//        stop = std::min(stop, tmp-piece[i].y);
-//    }
     for (int i = 0; i < 4; ++i) {
         int x = piece[i].x * cellWidth;
         int y = (piece[i].y - minY ) * cellHeight;
-//        std::cout << piece[i].x << " " << piece[i].y << '\n';
-        int lastEmptyRow = findLastEmptyRowInColumn(piece[i].x, piece[i].y);
-        std::cout << lastEmptyRow << '\n';
+        int lastEmptyRow = findLastRow(piece[i].x, piece[i].y);
         int posY = (BOARD_HEIGHT - lastEmptyRow - 1) + y + 540;
         int posX = (SCREEN_WIDTH - BOARD_WIDTH * cellWidth) / 2 + x;
         SDL_Rect cellRect = {posX, posY, cellWidth, cellHeight};
         SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
         SDL_RenderFillRect(gRenderer, &cellRect);
     }
-//    for(int i = 0; i < BOARD_HEIGHT; i++){
-//        for(int j = 0; j < BOARD_WIDTH; j++)
-//            std::cout << board[i][j];
-//        std::cout << '\n';
-//    }
-}
-Point GameState::generateNewPiece() {
-    Point nextPiece[4];
-    int randomPiece = rand() % 7;
-
-    for (int i = 0; i < 4; ++i) {
-        nextPiece[i].x = figures[randomPiece][i] % 2 + 2;
-        nextPiece[i].y = figures[randomPiece][i] / 2;
-    }
-
-    return nextPiece[4];
-}
-void GameState::updateNextPieces() {
-    for (int i = 0; i < 4; ++i) {
-    currentTetrads[i] = next1Tetrads[i];
-    next1Tetrads[i] = next2Tetrads[i];
-}
 }
 
 void GameState::renderNextPieces(SDL_Renderer* gRenderer, int randomColor) {
@@ -260,8 +220,6 @@ void GameState::renderNextPieces(SDL_Renderer* gRenderer, int randomColor) {
            SDL_Rect nextPieceRect;
            int pieceX = startX + piece[j].x *PIECE_SIZE;
            int pieceY = startY + piece[j].y *PIECE_SIZE + i*spacing;
-
-//           createRect(nextPieceRect, pieceX, pieceY, PIECE_SIZE, PIECE_SIZE);
            colorSelect(gRenderer,randomColor);
            SDL_RenderFillRect(gRenderer, &nextPieceRect);
          }

@@ -11,10 +11,12 @@ class Game
 {
 private:
       bool replay = false;
+      int check = 1;
       bool isRunning;
       int dx = 0;
-      bool rotate_,fast;
-      bool done = false;
+      bool rotate_;
+      bool fast;
+      bool done = true;
       bool pause = false,isPressed,beginGame,chooseSpeed;
       int randomColor = 0;
       int point;
@@ -24,8 +26,11 @@ private:
       Uint32 moveTime = 0;
       SDL_Event event;
       Mix_Music* playingMusic;
+      SDL_Texture* menuBackGround = NULL;
       SDL_Texture* backGround = NULL;
       SDL_Texture* blocks = NULL;
+      LTexture Start;
+      LTexture Exit;
       LTexture Score;
       LTexture Line;
       LTexture LevelTexture;
@@ -36,7 +41,7 @@ private:
       SDL_Renderer *gRenderer = NULL;
       TTF_Font* gFont = NULL;
       TTF_Font* gFont1 = NULL;
-
+      TTF_Font* gFont2 = NULL;
 
 public:
         Game();
