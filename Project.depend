@@ -1,0 +1,60 @@
+# depslib dependency file v1.0
+1712821420 source:e:\project\test\testsdl\project\utils.cpp
+	<iostream>
+	<cstdlib>
+	<ctime>
+	<cmath>
+	<chrono>
+	<algorithm>
+	"utils.h"
+
+1713190382 e:\project\test\testsdl\project\utils.h
+	<SDL.h>
+	<SDL_ttf.h>
+
+1714128040 source:e:\project\test\testsdl\project\gamestate.cpp
+	"GameState.h"
+	"utils.h"
+	"Data.h"
+	"iostream"
+	"Game.h"
+
+1714122753 e:\project\test\testsdl\project\gamestate.h
+	<SDL.h>
+	<vector>
+	"Data.h"
+	<algorithm>
+	"Game.h"
+
+1714039659 source:e:\project\test\testsdl\project\main.cpp
+	"Data.h"
+	<SDL.h>
+	<cstdlib>
+	<ctime>
+	"Game.h"
+
+1714052792 e:\project\test\testsdl\project\data.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_mixer.h>
+	<SDL_ttf.h>
+
+1714128040 e:\project\test\testsdl\project\game.h
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_mixer.h>
+	<SDL_ttf.h>
+	<bits/stdc++.h>
+	"utils.h"
+	<vector>
+
+1714127560 source:e:\project\test\testsdl\project\game.cpp
+	"Game.h"
+	<iostream>
+	<sstream>
+	"Data.h"
+	"GameState.h"
+	<string>
+	"utils.h"
+
