@@ -1,15 +1,15 @@
 #ifndef _GAMESTATE_H_
 #define _GAMESTATE_H_
 #include <SDL.h>
-#include<vector>
+#include <vector>
 #include "Data.h"
-
+#include <algorithm>
+#include "Game.h"
 struct Point
 {
     int x;
     int y;
 };
-// Tham khảo https://www.youtube.com/watch?v=zH_omFPqMO4&t=79s
 class GameState
 {
     Point tempPiece[4],piece[4];
@@ -30,7 +30,7 @@ class GameState
     int board[24][10],countPiece,tempBoard[24][10];
     const int PIECE_SIZE = 30.5;
     bool mark[25][10];
-
+    bool recordScore = 0;
 
 public:
 
@@ -54,6 +54,9 @@ public:
     Point generateNewPiece();
     void updateNextPieces();
     void renderNextPieces(SDL_Renderer* gRenderer,int randomColor);
+    bool updateScoreTable(int score, std::vector<int>& highestScore);
+    void setRecord(bool set);
+    bool getRecord();
 };
 #endif // _GAMESTATE_H_
 

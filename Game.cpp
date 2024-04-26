@@ -54,7 +54,7 @@ void Game::init(const char* title, int xPos, int yPos, int SCREEN_WIDTH, int SCR
 					success = false;
 				}
 //				SDL_SetHint (SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING, "1");
-//				if( !Mix_Init(MIX_INIT_WAVPACK)||Mix_OpenAudio( 44100,AUDIO_S16SYS, 2, 2048 ) < 0 )
+//				if( Mix_Init(MIX_INIT_MP3)||Mix_OpenAudio( 44100, AUDIO_S16SYS, 2, 256 ) < 0 )
 //                {
 //                    printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
 //                    success = false;
@@ -230,7 +230,7 @@ void Game::playGame()
           int gridHeight = 20;
           int cellWidth = (SCREEN_WIDTH / 1.2) / gridWidth;
           int cellHeight = (SCREEN_HEIGHT / 1.2) / gridHeight;
-
+//          std:: cout <<posX << " " << posY << " " << cellWidth << " " << cellHeight << std::endl;
 
           int smallerSize = std::min(cellWidth, cellHeight);
           cellWidth = cellHeight = smallerSize;
@@ -243,6 +243,7 @@ void Game::playGame()
                {
                 int posX = (SCREEN_WIDTH - gridWidth * cellWidth) / 2 + x * cellWidth;
                 int posY = (SCREEN_HEIGHT - gridHeight * cellHeight) / 2 + y * cellHeight;
+//                std:: cout <<posX << " " << posY << std::endl;
                 SDL_Rect cellRect = {posX, posY, cellWidth, cellHeight};
                 SDL_RenderDrawRect(gRenderer, &cellRect);
                }
@@ -317,11 +318,11 @@ void Game::playGame()
                   printf("Failed to render text texture!\n");
                   }
             LevelTexture.render(gRenderer, 410, 390);
-//            playingMusic = Mix_LoadMUS(playingM.c_str());
-//               if (playingMusic == NULL) {
+//           playingMusic = Mix_LoadMUS(playingM.c_str());
+ //              if (playingMusic == NULL) {
 //                    printf("Failed to load background music! SDL_mixer Error: %s\n", Mix_GetError());
 //               }
-//                Mix_PlayMusic(playingMusic, 0);
+//                Mix_PlayMusic(playingMusic, -1);
 
            game.draw_falling_piece(gRenderer);
  //          game.renderNextPieces(gRenderer, randomColor);
@@ -343,7 +344,7 @@ void Game::playGame()
                     printf("Failed to render text texture!\n");
                    }
                  replayTexture.render(gRenderer, 900, 360);
-            std::string exit = "Exit";
+               std::string exit = "Exit";
                  if (!exitTexture.loadFromRenderedText(gRenderer, gFont, exit, {255,0,0}))
                    {
                     printf("Failed to render text texture!\n");
@@ -377,11 +378,14 @@ void Game :: clean()
       gRenderer = NULL;
       gFont = NULL;
       gFont1 = NULL;
+      gFont2 = NULL;
+      SDL_DestroyTexture(backGround);
+      SDL_DestroyTexture(menuBackGround);
       TTF_Quit();
       IMG_Quit();
-//      Mix_FreeMusic(playingMusic);
-//      Mix_CloseAudio();
+ //     Mix_FreeMusic(playingMusic);
+ //     Mix_CloseAudio();
 //      Mix_Quit();
       SDL_Quit();
-//      TTF_CloseFont(gFont);
+      TTF_CloseFont(gFont);
   }

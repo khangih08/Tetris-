@@ -6,7 +6,7 @@
 #include <SDL_ttf.h>
 #include <bits/stdc++.h>
 #include "utils.h"
-
+#include <vector>
 class Game
 {
 private:
@@ -24,11 +24,12 @@ private:
       int level;
       int speed = 0,randomPiece = -1,gameSpeed = 1000;
       Uint32 moveTime = 0;
+      std::vector<int> highestScore;
       SDL_Event event;
-      Mix_Music* playingMusic;
+ //     Mix_Music* playingMusic;
       SDL_Texture* menuBackGround = NULL;
       SDL_Texture* backGround = NULL;
-      SDL_Texture* blocks = NULL;
+      LTexture HIGHScore;
       LTexture Start;
       LTexture Exit;
       LTexture Score;

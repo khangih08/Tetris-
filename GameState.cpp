@@ -2,6 +2,7 @@
 #include "utils.h"
 #include "Data.h"
 #include "iostream"
+#include "Game.h"
 using namespace std;
 void GameState::moveLeftRight(int dx)
 {
@@ -224,6 +225,4 @@ void GameState::renderNextPieces(SDL_Renderer* gRenderer, int randomColor) {
            SDL_RenderFillRect(gRenderer, &nextPieceRect);
          }
     }
-
-
 }
