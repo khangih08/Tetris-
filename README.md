@@ -29,6 +29,7 @@ Tetris hay Xếp Hình (1984), trò chơi có 7 loại Khối Hình (Tetromino) 
 - Cấu trúc rẽ nhánh,Vòng lặp
 - Kỹ thuật giải phóng bộ nhớ động.
 # 5. Kết luận:
+- Trong quá trình làm có tham khảo cách tạo khối(piece)  Tham khảo https://www.youtube.com/watch?v=zH_omFPqMO4&t=79s
 - Hiểu được mô hình phát triển 1 dự án: Phân tích, thiết kế, lập trình, kiểm thử.
 - Sử dụng thành thạo class, pointer, chia tách file,...
 - Cách dùng github.
