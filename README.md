@@ -1,5 +1,5 @@
 # Tetris-INT2215-UET
-# Video Demo 
+# Video Demo https://www.veed.io/view/051df899-f061-4384-80b7-daf79c1f4cf8?panel=share
 # 1. Hướng dẫn cài đặt
 - Chuyển repo này vào tài khoản riêng của bạn
 - Sao chép repo đã chia nhỏ vào cục bộ của bạn thông qua lệnh: git clone https://github.com/khangih08/Tetris-Game
